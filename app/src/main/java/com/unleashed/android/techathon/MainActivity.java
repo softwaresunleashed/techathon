@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.unleashed.android.techathon.databases.ListingsDB;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity  {
     private ImageButton btnLocation;
     private EditText etDescription;
     private EditText etPrice;
+    private Spinner spinner_location;
 
 
     private ListingsDB listingDb;
@@ -76,7 +78,7 @@ public class MainActivity extends AppCompatActivity  {
         mContext = getApplicationContext();
 
 
-        initializeLocationSpinner();
+        initializeLocationSpinner(null);
         initializeCategorySpinner();
 
         initializeDB(mContext);
@@ -173,6 +175,9 @@ public class MainActivity extends AppCompatActivity  {
 
 
                         mLocationSelected = getAddress(latitude, longitude);
+
+
+                        initializeLocationSpinner()
 
 
                     }
@@ -347,18 +352,22 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    private void initializeLocationSpinner() {
+    private void initializeLocationSpinner(String text) {
         // Location Spinner element
-        Spinner spinner_location = (Spinner) findViewById(R.id.spinnerLocation);
+        spinner_location = (Spinner) findViewById(R.id.spinnerLocation);
 
         // Location Spinner click listener
         //spinner_location.setOnItemSelectedListener(this);
 
         List<String> locations = new ArrayList<String>();
+        if(text != null){
+            locations.add(text);
+        }
         locations.add("Delhi");
         locations.add("Mumbai");
         locations.add("Bangalore");
         locations.add("Kolkata");
+
 
 
         // Creating adapter for spinner
