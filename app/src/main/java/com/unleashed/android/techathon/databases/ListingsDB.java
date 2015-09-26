@@ -29,7 +29,7 @@ public class ListingsDB {
     public static final String Col6 = "Price";
 
     // Create Table SQL String
-    private static final String create_table = "create table " + tablename + " (Id integer primary key AUTOINCREMENT, " + Col1 + " text not null, " + Col2 + " text not null" + Col3 + " text not null" + Col4 + " text not null" + Col5 + " text not null" + Col6 + " text not null" +");";
+    private static final String create_table = "create table " + tablename + " (Id integer primary key AUTOINCREMENT, " + Col1 + " text not null, " + Col2 + " text not null, " + Col3 + " text not null, " + Col4 + " text not null, " + Col5 + " text not null, " + Col6 + " text not null" +");";
 
 
 
@@ -66,6 +66,7 @@ public class ListingsDB {
     public long insertRecord(String col1_value, String col2_value, String col3_value, String col4_value, String col5_value, String col6_value) {
         ContentValues cv = new ContentValues();
 
+        long id = -1;
         // Pack data into a ContentValue object
 
         cv.put(Col1, col1_value);
@@ -78,11 +79,12 @@ public class ListingsDB {
         // Connect to database before performing any operation.
         try {
             this.connect();
+            id = database.insert(tablename, null, cv);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        return database.insert(tablename, null, cv);
+        return id;
     }
 
     // Declaring the retrieveAllRecords() method to retrieve all the employee details from the database.

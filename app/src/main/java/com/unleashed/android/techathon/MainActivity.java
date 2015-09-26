@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,11 +21,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.unleashed.android.techathon.databases.ListingsDB;
+import com.unleashed.android.techathon.locationtracker.GpsLocationTracker;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +36,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -48,6 +53,7 @@ public class MainActivity extends AppCompatActivity  {
     private Button btnSelectImage;
     private Button btnPopulateDescription;
     private Button btnSubmit;
+    private ImageButton btnLocation;
     private EditText etDescription;
     private EditText etPrice;
 
@@ -132,15 +138,105 @@ public class MainActivity extends AppCompatActivity  {
                 }
 
 
-                listingDb.insertRecord(mDescription, mProductImageLocation, mLocationSelected, mCategorySelected, mSubCategorySelected , mPrice );
+                try{
+                    listingDb.insertRecord(mDescription, mProductImageLocation, mLocationSelected, mCategorySelected, mSubCategorySelected , mPrice );
+                    Toast.makeText(mContext, "Listing Added Successfully.", Toast.LENGTH_SHORT).show();
+                    resetUI();
+                }catch (Exception ex){
+                    Toast.makeText(mContext, "Error Writing to Listing. Try Again.", Toast.LENGTH_SHORT).show();
+                }
+
+
 
             }
         });
 
 
 
+        btnLocation = (ImageButton)findViewById(R.id.imgbtn_getLocation);
+        btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                try{
+
+                    GpsLocationTracker mGpsLocationTracker = new GpsLocationTracker(MainActivity.this);
+
+                    /**
+                     * Set GPS Location fetched address
+                     */
+                    if (mGpsLocationTracker.canGetLocation())
+                    {
+
+                        Double latitude = mGpsLocationTracker.getLatitude();
+                        Double longitude = mGpsLocationTracker.getLongitude();
 
 
+                        mLocationSelected = getAddress(latitude, longitude);
+
+
+                    }
+                    else
+                    {
+                        mGpsLocationTracker.showSettingsAlert();
+                    }
+
+                }catch (Exception ex){
+                    Toast.makeText( getApplicationContext(),"Error Retrieving Location. Try Again.",Toast.LENGTH_SHORT).show();
+
+                }
+
+
+            }
+        });
+
+
+
+    }
+
+
+    public String getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+
+        String addressInString = "Address Not Found";
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+
+            addressInString = obj.getAddressLine(0);
+//            GUIStatics.currentAddress = obj.getSubAdminArea() + ","
+//                    + obj.getAdminArea();
+//            GUIStatics.latitude = obj.getLatitude();
+//            GUIStatics.longitude = obj.getLongitude();
+//            GUIStatics.currentCity= obj.getSubAdminArea();
+//            GUIStatics.currentState= obj.getAdminArea();
+//            add = add + "\n" + obj.getCountryName();
+//            add = add + "\n" + obj.getCountryCode();
+//            add = add + "\n" + obj.getAdminArea();
+//            add = add + "\n" + obj.getPostalCode();
+//            add = add + "\n" + obj.getSubAdminArea();
+//            add = add + "\n" + obj.getLocality();
+//            add = add + "\n" + obj.getSubThoroughfare();
+
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        }
+
+        return addressInString;
+    }
+
+    private void resetUI()
+    {
+
+
+        etDescription.setText("");
+        etPrice.setText("");
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.select_none);
+        imgViewProductPic.setImageBitmap(bm);
 
     }
 
