@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Configurable parameters -->
+
+<resources>
+
+    <!-- App Feature Set - FeatureTags for Free & Paid Apps goes here. -->
+    <integer name="free_version_code">1</integer>
+    <integer name="host_ads">1</integer>
+
+    <!-- Payment Gateways to Enable -->
+    <integer name="PG_PAYPAL">0</integer>
+    <integer name="PG_GOOGLE">1</integer>
+
+
+
+    <string name="app_name">Techathon App 1</string>
+    <string name="versionCode">1</string>
+    <string name="versionName">@string/app_version</string>
+    <string name="app_version"> ( v1.1 ) 2015-09-26</string>
+
+
+    <string name="add_to_blacklist">Add Number to Blacklist...</string>
+    <string name="blacklist_dialog_msg">Enter the number to be added to Blacklisted numbers.</string>
+
+    <string name="open_recordings">Open Recordings</string>
+    <string name="ok_got_it">Ok Got It!!!</string>
+    <string name="save_file">Save</string>
+    <string name="skip_always">Dont Ask Again</string>
+    <string name="add">Add To List</string>
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="confirm_msg">Yes Please!</string>
+    <string name="deny_msg">No Thanks!</string>
+    <string name="dialog_request_promotional_email_msg">Spread a word about BEEOK to all your friends.
+    Clicking YES, assumes your approval to send a Promotional Email to ALL email contacts in your list.</string>
+    <string name="dialog_exit_app_message">Confirm Application Exit by pressing YES.</string>
+    <string name="dialog_call_blocker_message">Call Blocker Feature : Feature available in Paid Version.</string>
+
+
+
+
+
+
+</resources>
