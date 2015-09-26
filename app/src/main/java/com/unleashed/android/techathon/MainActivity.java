@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.unleashed.android.techathon.databases.ListingsDB;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity  {
     private String mLocationSelected;
     private String mCategorySelected;
     private String mSubCategorySelected;
+    private String mDescription;
     private String mProductImageLocation;
     private String mPrice;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity  {
     private ImageView imgViewProductPic;
     private Button btnSelectImage;
     private Button btnPopulateDescription;
+    private Button btnSubmit;
     private EditText etDescription;
     private EditText etPrice;
 
@@ -67,9 +70,14 @@ public class MainActivity extends AppCompatActivity  {
         mContext = getApplicationContext();
 
 
+        initializeLocationSpinner();
+        initializeCategorySpinner();
+
+        initializeDB(mContext);
+
 
         // Button to Select Image
-        btnSelectImage = (Button)findViewById(R.id.btn_selectImage);
+        btnSelectImage = (Button) findViewById(R.id.btn_selectImage);
         btnSelectImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,33 +88,55 @@ public class MainActivity extends AppCompatActivity  {
         });
 
         // Button to populate description
-        btnPopulateDescription = (Button)findViewById(R.id.populateDescription);
+        btnPopulateDescription = (Button) findViewById(R.id.populateDescription);
         btnPopulateDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                etDescription.setText("");
+                try{
 
-                String p1 = "Dear Reader,\n";
-                String p2 = "I wish to Sell my ";
-                String p3 = " which is of make ";
-                String p4 = "\n I Reside in  ";
-                String p5 = "\n I am selling this product at a nominal price of  ";
-                String p6 = etPrice.getText().toString();
+                    if(etPrice.getText().toString().isEmpty()){
+                        Toast.makeText(mContext, "Please fill in required fields before you AutoGenerate Description.", Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-                String generatedDescritionMesg = p1 + p2 + mCategorySelected + p3 + mSubCategorySelected + p4 + mLocationSelected + p5 + p6;
-                etDescription.setText(generatedDescritionMesg);
+
+                    etDescription.setText("");
+
+                    String p1 = "Dear Reader,\n";
+                    String p2 = "I wish to Sell my ";
+                    String p3 = " which is of make ";
+                    String p4 = "\n.I Reside in  ";
+                    String p5 = "\n.I am selling this product at a nominal price of  ";
+                    String p6 = mPrice = etPrice.getText().toString();
+
+                    String generatedDescritionMesg = p1 + p2 + mCategorySelected + p3 + mSubCategorySelected + p4 + mLocationSelected + p5 + p6;
+                    etDescription.setText(generatedDescritionMesg);
+
+                    mDescription = generatedDescritionMesg;
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
 
             }
         });
 
+        // Button to save data to database
+        btnSubmit = (Button)findViewById(R.id.btn_Submit);
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(etDescription.getText().toString().isEmpty()){
+                    Toast.makeText(mContext, "Please Fill In All Fields And Then Click Submit.", Toast.LENGTH_LONG).show();
+                    return;
+                }
 
-        initializeLocationSpinner();
 
-        initializeCategorySpinner();
+                listingDb.insertRecord(mDescription, mProductImageLocation, mLocationSelected, mCategorySelected, mSubCategorySelected , mPrice );
 
+            }
+        });
 
-        initializeDB(mContext);
 
 
 

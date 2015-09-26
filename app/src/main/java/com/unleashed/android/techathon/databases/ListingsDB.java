@@ -25,10 +25,11 @@ public class ListingsDB {
     public static final String Col2 = "Image";
     public static final String Col3 = "Location";
     public static final String Col4 = "Category";
-    public static final String Col5 = "Price";
+    public static final String Col5 = "SubCategory";
+    public static final String Col6 = "Price";
 
     // Create Table SQL String
-    private static final String create_table = "create table " + tablename + " (Id integer primary key AUTOINCREMENT, " + Col1 + " text not null, " + Col2 + " text not null" + Col3 + " text not null" + Col4 + " text not null" + Col5 + " text not null" + ");";
+    private static final String create_table = "create table " + tablename + " (Id integer primary key AUTOINCREMENT, " + Col1 + " text not null, " + Col2 + " text not null" + Col3 + " text not null" + Col4 + " text not null" + Col5 + " text not null" + Col6 + " text not null" +");";
 
 
 
@@ -62,7 +63,7 @@ public class ListingsDB {
     }
 
     // Declaring the insertRecord() method to add the record details into the database
-    public long insertRecord(String col1_value, String col2_value, String col3_value, String col4_value, String col5_value) {
+    public long insertRecord(String col1_value, String col2_value, String col3_value, String col4_value, String col5_value, String col6_value) {
         ContentValues cv = new ContentValues();
 
         // Pack data into a ContentValue object
@@ -72,6 +73,7 @@ public class ListingsDB {
         cv.put(Col3, col3_value);
         cv.put(Col4, col4_value);
         cv.put(Col5, col5_value);
+        cv.put(Col6, col6_value);
 
         // Connect to database before performing any operation.
         try {
@@ -94,7 +96,7 @@ public class ListingsDB {
             ex.printStackTrace();
         }
 
-       return database.query(tablename, new String[]{Id, Col1, Col2, Col3, Col4}, null, null, null, null, null);
+       return database.query(tablename, new String[]{Id, Col1, Col2, Col3, Col4, Col5, Col6}, null, null, null, null, null);
 
     }
 
@@ -106,7 +108,7 @@ public class ListingsDB {
         try{
             this.connect();
 
-            c = database.query(true, tablename, new String[]{Id, Col1, Col2, Col3, Col4}, Col1 + "=" + "\"" + recordId + "\"", null, null, null, null, null);
+            c = database.query(true, tablename, new String[]{Id, Col1, Col2, Col3, Col4, Col5,Col6}, Col1 + "=" + "\"" + recordId + "\"", null, null, null, null, null);
 
             if (c != null) {
                 c.moveToFirst();
@@ -137,7 +139,7 @@ public class ListingsDB {
 
     // Declaring the updateEmployee() method to update an employee details from the database.
     // Update the record on the basis of ID....get the ID first and then call this function to update values of cols
-    public boolean updateRecord(long id, String col1_value, String col2_value, String col3_value, String col4_value, String col5_value) throws SQLException {
+    public boolean updateRecord(long id, String col1_value, String col2_value, String col3_value, String col4_value, String col5_value, String col6_value) throws SQLException {
         this.connect();
 
         ContentValues cvalues = new ContentValues();
@@ -146,6 +148,7 @@ public class ListingsDB {
         cvalues.put(Col3, col3_value);
         cvalues.put(Col4, col4_value);
         cvalues.put(Col5, col5_value);
+        cvalues.put(Col6, col6_value);
 
         // Update the record on the basis of ID....get the ID first and then call this function to update values of cols
         return database.update(tablename, cvalues, Id + "=" + id, null) > 0;
