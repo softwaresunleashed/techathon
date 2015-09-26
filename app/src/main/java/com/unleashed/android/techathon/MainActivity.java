@@ -190,13 +190,13 @@ public class MainActivity extends AppCompatActivity  {
     public String getAddress(double lat, double lng) {
         Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
 
-        String addressInString = "Address Not Found";
+        String address = "Address Not Found";
 
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             Address obj = addresses.get(0);
 
-            addressInString = obj.getAddressLine(0);
+            address = obj.getAddressLine(0);
 //            GUIStatics.currentAddress = obj.getSubAdminArea() + ","
 //                    + obj.getAdminArea();
 //            GUIStatics.latitude = obj.getLatitude();
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity  {
 
         }
 
-        return addressInString;
+        return address;
     }
 
     private void resetUI()
